@@ -30,36 +30,81 @@ const createAndSavePerson = (done) => {
     })
     };
 
-const createManyPeople = (arrayOfPeople, done) => {
-  done(null /*, data*/);
+    var arrayOfPeople = [{
+      name:"Matheus",
+      age: 24,
+      favoriteFoods: ['Lasagna', 'Beans']
+    },
+    {
+      name:"Laura",
+      age: 31,
+      favoriteFoods: ['Rice', 'Beans']
+    },
+    {
+      name:"Max",
+      age: 20,
+      favoriteFoods: ['Taco', 'Rice']
+    }];
+
+var createManyPeople = (arrayOfPeople, done) => {
+  Person.create(arrayOfPeople, function(err, people) {
+    if(err) return console.log(err);
+    done(null, people);
+  });
+  
 };
 
-const findPeopleByName = (personName, done) => {
-  done(null /*, data*/);
+var findPeopleByName = (personName, done) => {
+  Person.find({name: personName}, function(err, people) {
+    if(err) return console.log(err);
+    done(null, people);
+  });
 };
 
-const findOneByFood = (food, done) => {
-  done(null /*, data*/);
+var findOneByFood = (food, done) => {
+  Person.findOne({favoriteFoods: food}, function(err, data) {
+    if (err) return console.log(err);
+    done(null, data);
+  });
 };
 
 const findPersonById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findById({_id: personId}, function(err, id) {
+    if(err) return console.log(err);
+    done(null, id);
+  })
 };
 
 const findEditThenSave = (personId, done) => {
   const foodToAdd = "hamburger";
-
-  done(null /*, data*/);
+  Person.findById({_id: personId}, function(err, id) {
+    if(err) return console.log(err);
+    id.favoriteFoods.push(foodToAdd);
+    id.save((err, updateId) => {
+      if(err) return console.log(err);
+      done(null, updateId);
+    });
+  })
 };
 
 const findAndUpdate = (personName, done) => {
   const ageToSet = 20;
-
-  done(null /*, data*/);
+  Person.findOneAndUpdate({name: personName},
+    {age: ageToSet},
+    {new: true},
+    function(err, person) {
+      if(err) return console.log(err);
+      done(null, person);
+    })
 };
 
 const removeById = (personId, done) => {
-  done(null /*, data*/);
+  Person.findByIdAndDelete({_id: personId}, 
+    null,
+    function(err, id) {
+      if (err) return console.log(err);
+      done(null, id);
+    })
 };
 
 const removeManyPeople = (done) => {
